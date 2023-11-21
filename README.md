@@ -101,3 +101,90 @@ ex)
 | `afterend`   | 콘텐츠를 타겟 뒤에 타겟의 부모 엘리먼트 내에 추가합니다.    |
 | `delete`     | 응답과 관계없이 타겟 엘리먼트를 삭제합니다.                  |
 | `none`       | 응답에서 콘텐츠를 추가하지 않습니다. (Out of Band Swaps 및 Response Headers는 여전히 처리됩니다.) |
+
+### hx-swap 옵션 
+
+| Option         | Description                                                          |
+| -------------- | ------------------------------------------------------------- |
+| `transition`     | 뷰 전환 API를 사용할지 여부 (true 또는 false)                  |
+| `swap`           | 이전 콘텐츠가 지워지고 새 콘텐츠가 삽입되는 사이의 교체 지연 시간 (예: 100ms) |
+| `settle`         | 새 콘텐츠가 삽입된 후 안정화되기까지의 지연 시간 (예: 100ms)   |
+| `ignoreTitle`    | true로 설정하면 새 콘텐츠에서 찾은 제목이 무시되고 문서 제목이 업데이트되지 않음 |
+| `scroll`         | top 또는 bottom으로 설정하면 대상 요소를 맨 위 또는 맨 아래로 스크롤 |
+| `show`           | top 또는 bottom으로 설정하면 대상 요소를 화면의 맨 위 또는 맨 아래로 스크롤 |
+
+- 여기서 <code>title</code>은 <code><titla></title></code> 태그를 제외한 나머지를 교체하는 것이다. 
+- scroll & show 예제
+```html
+<div style="height:200px; overflow: scroll" 
+    hx-get="/example" 
+    hx-swap="beforeend scroll:bottom">
+    Get Some HTML & Append It & Scroll To Bottom
+</div>
+
+<div hx-get="/example" 
+    hx-swap="innerHTML show:top"
+    hx-target="#another-div">
+    Get Some Content
+</div>
+```
+- <code>show</code>나 <code>scroll</code>을 하는 타겟을 변경할 수 있다. 
+```html
+<div hx-get="/example" 
+    hx-swap="innerHTML show:#another-div:top">
+    Get Some Content
+</div>
+```
+
+- window top, bottom도 가능하다.
+```html
+<div hx-get="/example" 
+    hx-swap="innerHTML show:window:top">
+    Get Some Content
+</div>
+```
+
+- focus scroll 막기: 보통 입력이 되면 focus가 되는데 다음과 같이 막을 수 있다.  
+```html
+<input id="name" hx-get="/validation" 
+    hx-swap="outerHTML focus-scroll:true"/>
+
+<input id="name" hx-get="/validation" 
+    hx-swap="outerHTML focus-scroll:false"/>
+```
+
+# Synchronization 
+비동기도 당연히 가능하다. 
+
+```html
+<form hx-post="/store">
+    <input id="title" name="title" type="text"
+        hx-post="/validate"
+        hx-trigger="change"
+    >
+    <button type="submit">Submit</button>
+</form>
+```
+> 여기서 즉시 제출하면 <code>/validate</code>, <code>/store</code>로 두 개의 병렬 요청이 트리거 된다. 
+  입력에 <code>hx-sync="closest form:abort</code>를 사용하면 해당 입력의 요청이 진행 중인 동안 양식에서 요청을 감시하고, 입력 요청이 진행 중일 때 다른 입력 요청을 중단한다. 
+
+```html
+<form hx-post="/store">
+    <input id="title" name="title" type="text"
+        hx-post="/validate"
+        hx-trigger="change"
+        hx-sync="closest form:abort"
+    >
+    <button type="submit">Submit</button>
+</form>
+```
+
+> <code>htmx:abort</code>이벤트를 전송하여 진행 중인 모든 요청을 취소할 수도 있다. 
+```html
+<button id="request-button" hx-post="/example">
+    Issue Request
+</button>
+<button onclick="htmx.trigger('#request-button', 'htmx:abort')">
+    Cancel Request
+</button>
+```
