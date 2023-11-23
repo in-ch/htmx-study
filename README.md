@@ -188,3 +188,51 @@ ex)
     Cancel Request
 </button>
 ```
+
+# CSS Transitions 
+애니메이션 효과를 줄 수 있다.
+```html
+<div id="div1">Original Content</div>
+<!-- 이것을 -->
+<div id="div1" class="red">New Content</div>
+<!-- 요렇게 바꾼다. -->
+```
+
+```css
+.red {
+    color: red;
+    transition: all ease-in 1s ;
+}
+```
+
+또다른 예제 
+
+```html
+    <style>
+        .smooth {
+          transition: all 1s ease-in;
+        }
+    </style>
+    <div id="color-demo" class="smooth" style="color:red"
+            hx-get="http://localhost:4000/event/list" hx-swap="outerHTML" hx-trigger="click">
+        Color Swap Demo
+    </div>
+```
+
+실제로 해보니깐 일단 저 <code>#color-demo</code>가 통째로 바뀌기 때문에 그 안에 잘 맞는 html를 넣어줘야 한다. 
+
+CSS Transition를 이해하려면 <code>swap & settle</code>을 이해해야 한다.
+서버에서 새로운 컨텐츠를 받을 때, 해당 콘텐츠가 교체되기 전에 페이지의 기존 콘텐츠에서 id 속성으로 일치하는 요소를 찾는다.
+새로운 컨텐츠에 대해 요소가 일치하는 경우, 스왑이 발생하기 전에 이전 콘텐츠의 속성이 새로운 요소로 복사된다. 그런 다음 새로운 콘텐츠가 스왑되지만 이전 속성 값으로 스왑된다. 마지막으로 속성 값은 <code>settle</code> 지연 이후에 스왑된다. -> 좀 이상하긴 한데... javascript를 쓰지 않고도 css를 전환할 수 있도록 해준다. 
+
+# Out of Band Swaps 
+Response에서 직접 id 속성을 사용하여 콘텐츠를 DOM에 스왑하려면 <code>hx-swap-oob</code>속성을 사용할 수 있다/
+```html
+<div id="message" hx-swap-oob="true">Swap me directly!</div>
+Additional Content
+```
+
+여기서 div#message가 일치하는 DOM 요소로 직접 스왑되고, 추가적인 콘텐츠는 일반적인 방식으로 대상에 스왑된다. (? 뭔 소리야... 더 검색해봤는데,, 나처럼 이해 못하는 사람이 많은 듯 ,, 이건 직접 예제를 만들어봐야 이해가 될 것 같다. 바로 예제 만들어보자. ) 
+주의할 점은 이 속성은 최상위 수준에 있어야 하며 최상위 요소의 자식이 아니어야 한다. 
+
+

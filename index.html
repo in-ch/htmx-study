@@ -11,5 +11,16 @@
         Click Me
     </button>
     <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+
+    <style>
+        .smooth {
+          transition: all 1s ease-in;
+        }
+    </style>
+    <div id="color-demo" class="smooth" style="color:red"
+            hx-get="http://localhost:4000/event/list" hx-swap="outerHTML" hx-trigger="click">
+        Color Swap Demo
+    </div>
+    <div id="message" hx-swap-oob="true">Swap me directly!</div>
 </body>
 </html>
