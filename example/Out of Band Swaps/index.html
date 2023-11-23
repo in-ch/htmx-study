@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>htmx Out-of-Band Swaps 예제</title>
+    <script src="https://unpkg.com/htmx.org@1.9.8"></script>
+</head>
+<body>
+    <!-- 클릭할 버튼과 Out-of-Band Swaps를 수행할 대상 요소 -->
+    <button hx-get="http://[::]:8000/new-content.html" hx-trigger="click" hx-swap-oob="true">Load New Content</button>
+    <div id="message">Original Content</div>
+
+</body>
+</html>
